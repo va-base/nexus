@@ -1,0 +1,97 @@
+{
+  "company": "ACME Corp",
+  "ticker": "ACME",
+  "collection_date": "2025-11-01",
+  "postings": [
+    {
+      "title": "Senior Machine Learning Engineer",
+      "department": "Engineering",
+      "location": "San Francisco, CA",
+      "seniority": "senior",
+      "posting_date": "2025-10-28",
+      "url": "https://careers.acme.com/jobs/123",
+      "description": "We're looking for a Senior Machine Learning Engineer to join our AI Research team. You'll work on cutting-edge ML models and infrastructure. Requirements: 5+ years of experience in machine learning, strong Python skills, experience with PyTorch or TensorFlow. Keywords: AI, machine learning, deep learning, Python."
+    },
+    {
+      "title": "Staff Software Engineer - Infrastructure",
+      "department": "Engineering",
+      "location": "Remote",
+      "seniority": "senior",
+      "posting_date": "2025-10-25",
+      "url": "https://careers.acme.com/jobs/124",
+      "description": "Join our Infrastructure team to build scalable systems that power our AI platform. Requirements: 7+ years of experience, expertise in distributed systems, Kubernetes, and cloud infrastructure. Keywords: cloud, infrastructure, Kubernetes, distributed systems."
+    },
+    {
+      "title": "Enterprise Account Executive",
+      "department": "Sales",
+      "location": "New York, NY",
+      "seniority": "mid",
+      "posting_date": "2025-10-20",
+      "url": "https://careers.acme.com/jobs/125",
+      "description": "We're seeking an Enterprise Account Executive to drive new business in the Northeast region. Requirements: 5+ years of enterprise software sales experience, track record of exceeding quota. Keywords: sales, enterprise, B2B."
+    },
+    {
+      "title": "Director of Product Management - AI Platform",
+      "department": "Product",
+      "location": "San Francisco, CA",
+      "seniority": "director",
+      "posting_date": "2025-10-18",
+      "url": "https://careers.acme.com/jobs/126",
+      "description": "Lead product strategy for our AI platform. Requirements: 8+ years of product management experience, deep understanding of AI/ML technologies, experience with enterprise products. Keywords: product management, AI, platform, enterprise."
+    },
+    {
+      "title": "Senior Data Scientist",
+      "department": "Data Science",
+      "location": "Remote",
+      "seniority": "senior",
+      "posting_date": "2025-10-15",
+      "url": "https://careers.acme.com/jobs/127",
+      "description": "Join our Data Science team to build analytics and insights for our customers. Requirements: 5+ years of data science experience, strong SQL and Python skills, experience with ML models. Keywords: data science, analytics, machine learning, Python."
+    },
+    {
+      "title": "VP of Engineering",
+      "department": "Engineering",
+      "location": "San Francisco, CA",
+      "seniority": "executive",
+      "posting_date": "2025-10-12",
+      "url": "https://careers.acme.com/jobs/128",
+      "description": "Lead our engineering organization as we scale from 100 to 300+ engineers. Requirements: 12+ years of engineering experience, 5+ years in engineering leadership, experience scaling high-growth startups. Keywords: engineering leadership, VP, executive, scaling."
+    },
+    {
+      "title": "Software Engineer - Backend",
+      "department": "Engineering",
+      "location": "Remote",
+      "seniority": "mid",
+      "posting_date": "2025-10-10",
+      "url": "https://careers.acme.com/jobs/129",
+      "description": "Build backend services for our AI platform. Requirements: 3+ years of backend development experience, proficiency in Go or Python, experience with microservices. Keywords: backend, microservices, Go, Python, API."
+    },
+    {
+      "title": "Principal Engineer - AI Infrastructure",
+      "department": "Engineering",
+      "location": "San Francisco, CA",
+      "seniority": "senior",
+      "posting_date": "2025-10-08",
+      "url": "https://careers.acme.com/jobs/130",
+      "description": "Lead technical architecture for our AI infrastructure platform. Requirements: 10+ years of engineering experience, deep expertise in distributed systems and ML infrastructure. Keywords: AI, infrastructure, distributed systems, architecture."
+    },
+    {
+      "title": "Customer Success Manager - Enterprise",
+      "department": "Customer Success",
+      "location": "Remote",
+      "seniority": "mid",
+      "posting_date": "2025-10-05",
+      "url": "https://careers.acme.com/jobs/131",
+      "description": "Ensure success for our enterprise customers. Requirements: 4+ years of customer success experience, technical background preferred. Keywords: customer success, enterprise, B2B."
+    },
+    {
+      "title": "Senior Product Designer",
+      "department": "Design",
+      "location": "San Francisco, CA",
+      "seniority": "senior",
+      "posting_date": "2025-10-01",
+      "url": "https://careers.acme.com/jobs/132",
+      "description": "Design intuitive experiences for our AI platform. Requirements: 5+ years of product design experience, strong portfolio, experience with developer tools. Keywords: product design, UX, UI, developer tools."
+    }
+  ]
+}
