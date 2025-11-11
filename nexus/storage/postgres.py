@@ -54,12 +54,15 @@ class PostgresStore:
     
     def insert_hypothesis(self, hypothesis: Dict[str, Any]) -> UUID:
         """Insert a hypothesis"""
+        embedding = hypothesis.get("embedding")
+        embedding_str = str(embedding) if embedding else None
+        
         query = """
             INSERT INTO hypotheses (company_id, theme_id, statement, hypothesis_type, 
                                    time_horizon, target_date, initial_belief, embedding, 
                                    metadata, created_by)
             VALUES (:company_id, :theme_id, :statement, :hypothesis_type, 
-                    :time_horizon, :target_date, :initial_belief, :embedding, 
+                    :time_horizon, :target_date, :initial_belief, :embedding::vector, 
                     :metadata, :created_by)
             RETURNING id
         """
@@ -71,7 +74,7 @@ class PostgresStore:
             "time_horizon": hypothesis.get("time_horizon"),
             "target_date": hypothesis.get("target_date"),
             "initial_belief": hypothesis.get("initial_belief", 0.5),
-            "embedding": hypothesis.get("embedding"),
+            "embedding": embedding_str,
             "metadata": json.dumps(hypothesis.get("metadata", {})),
             "created_by": hypothesis.get("created_by", "system")
         })
@@ -106,13 +109,16 @@ class PostgresStore:
     
     def insert_claim(self, claim: Dict[str, Any]) -> UUID:
         """Insert a claim"""
+        embedding = claim.get("embedding")
+        embedding_str = str(embedding) if embedding else None
+        
         query = """
             INSERT INTO claims (evidence_id, company_id, claim_text, claim_type, 
                                polarity, magnitude, confidence, extracted_entities, 
                                embedding, model_version)
             VALUES (:evidence_id, :company_id, :claim_text, :claim_type, 
                     :polarity, :magnitude, :confidence, :extracted_entities, 
-                    :embedding, :model_version)
+                    :embedding::vector, :model_version)
             RETURNING id
         """
         result = self.execute(query, {
@@ -124,7 +130,7 @@ class PostgresStore:
             "magnitude": claim.get("magnitude"),
             "confidence": claim.get("confidence"),
             "extracted_entities": json.dumps(claim.get("extracted_entities", {})),
-            "embedding": claim.get("embedding"),
+            "embedding": embedding_str,
             "model_version": claim.get("model_version")
         })
         return result.fetchone()[0]

@@ -48,7 +48,7 @@ CREATE TABLE hypotheses (
     target_date DATE,
     initial_belief FLOAT DEFAULT 0.5,
     status VARCHAR(20) DEFAULT 'active',
-    embedding vector(1536),
+    embedding vector(384),
     metadata JSONB,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     created_by VARCHAR(100)
@@ -90,7 +90,7 @@ CREATE TABLE claims (
     magnitude FLOAT,
     confidence FLOAT,
     extracted_entities JSONB,
-    embedding vector(1536),
+    embedding vector(384),
     model_version VARCHAR(50),
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -154,7 +154,7 @@ CREATE TABLE memos (
     author VARCHAR(100),
     related_hypotheses UUID[],
     related_evidence UUID[],
-    embedding vector(1536),
+    embedding vector(384),
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
