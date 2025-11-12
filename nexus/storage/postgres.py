@@ -5,7 +5,7 @@ from datetime import datetime
 from typing import List, Optional, Dict, Any
 from uuid import UUID
 from sqlalchemy import create_engine, text
-from sqlalchemy.pool import NullPool
+from sqlalchemy.pool import QueuePool
 from nexus.config import settings
 
 
@@ -14,7 +14,14 @@ class PostgresStore:
     
     def __init__(self, database_url: Optional[str] = None):
         self.database_url = database_url or settings.database_url
-        self.engine = create_engine(self.database_url, poolclass=NullPool)
+        self.engine = create_engine(
+            self.database_url,
+            poolclass=QueuePool,
+            pool_size=10,
+            max_overflow=20,
+            pool_pre_ping=True,
+            pool_recycle=3600
+        )
     
     def execute(self, query: str, params: Optional[Dict[str, Any]] = None):
         """Execute a query"""
