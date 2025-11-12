@@ -1,0 +1,33 @@
+[
+  {
+    "statement": "ACME revenue growth will exceed 30% YoY in Q4 2025",
+    "company": "ACME",
+    "theme": "AI Infrastructure",
+    "type": "growth",
+    "time_horizon": "short_term",
+    "target_date": "2025-12-31",
+    "initial_belief": 0.65,
+    "priority": "high",
+    "tags": ["revenue", "growth", "q4"]
+  },
+  {
+    "statement": "BETA is gaining market share in the premium segment",
+    "company": "BETA",
+    "theme": "Consumer Resilience",
+    "type": "market_share",
+    "time_horizon": "medium_term",
+    "initial_belief": 0.55,
+    "priority": "medium",
+    "tags": ["market-share", "premium"]
+  },
+  {
+    "statement": "AI infrastructure spending will accelerate in 2026",
+    "theme": "AI Infrastructure",
+    "type": "market",
+    "time_horizon": "long_term",
+    "target_date": "2026-12-31",
+    "initial_belief": 0.7,
+    "priority": "high",
+    "tags": ["market", "capex", "ai"]
+  }
+]

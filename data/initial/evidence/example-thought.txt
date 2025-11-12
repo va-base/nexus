@@ -1,0 +1,16 @@
+Company: ACME
+Date: 2025-11-10
+Title: Initial thoughts on ACME's AI positioning
+
+I've been thinking about ACME's positioning in the AI infrastructure space. They seem to be capturing a disproportionate share of enterprise AI workloads, particularly in the financial services vertical.
+
+Key observations:
+- Their GPU utilization rates are consistently above 85%, suggesting strong demand
+- Recent partnerships with major banks indicate enterprise traction
+- Pricing power seems intact despite competition from hyperscalers
+
+Concerns:
+- Supply chain constraints could limit growth in H1 2026
+- Competitive pressure from cloud providers offering similar services
+
+This warrants deeper investigation into their Q4 results and forward guidance.

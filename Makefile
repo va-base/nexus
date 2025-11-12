@@ -1,15 +1,16 @@
-.PHONY: help setup ingest test run eval clean
+.PHONY: help setup bootstrap ingest test run eval clean
 
 help:
 	@echo "Nexus v0 - Investment Research System"
 	@echo ""
 	@echo "Targets:"
-	@echo "  setup    - Initialize database and seed fixtures"
-	@echo "  ingest   - Run ingestion pipelines on fixtures"
-	@echo "  test     - Run unit and integration tests"
-	@echo "  run      - Start all services (docker-compose up)"
-	@echo "  eval     - Run evaluation suite"
-	@echo "  clean    - Stop services and remove volumes"
+	@echo "  setup      - Initialize database and seed fixtures"
+	@echo "  bootstrap  - Load initial data from data/initial/"
+	@echo "  ingest     - Run ingestion pipelines on fixtures"
+	@echo "  test       - Run unit and integration tests"
+	@echo "  run        - Start all services (docker-compose up)"
+	@echo "  eval       - Run evaluation suite"
+	@echo "  clean      - Stop services and remove volumes"
 
 setup:
 	@echo "Setting up Nexus..."
@@ -18,6 +19,11 @@ setup:
 	sleep 10
 	docker-compose run --rm worker python scripts/seed_fixtures.py
 	@echo "Setup complete!"
+
+bootstrap:
+	@echo "Bootstrapping initial data..."
+	docker-compose run --rm worker python scripts/bootstrap_initial_data.py
+	@echo "Bootstrap complete!"
 
 ingest:
 	@echo "Running ingestion pipelines..."

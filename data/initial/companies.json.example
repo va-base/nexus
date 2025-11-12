@@ -1,0 +1,24 @@
+[
+  {
+    "ticker": "ACME",
+    "name": "Acme Corp",
+    "sector": "Technology",
+    "market_cap": 50000000000,
+    "is_public": true,
+    "notes": "Leading AI infrastructure company"
+  },
+  {
+    "ticker": "BETA",
+    "name": "Beta Industries",
+    "sector": "Consumer",
+    "market_cap": 25000000000,
+    "is_public": true,
+    "notes": "E-commerce platform with strong growth"
+  },
+  {
+    "name": "Gamma Ventures",
+    "sector": "Technology",
+    "is_public": false,
+    "notes": "Private company, Series C stage"
+  }
+]
