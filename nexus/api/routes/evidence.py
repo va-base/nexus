@@ -1,6 +1,7 @@
 """Evidence API routes"""
-from typing import List
+from typing import List, Optional
 from uuid import UUID
+from datetime import date
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from nexus.storage.postgres import PostgresStore
@@ -15,6 +16,15 @@ class EvidenceResponse(BaseModel):
     title: str
     source_date: str
     validation_status: str
+
+
+class EvidenceCreate(BaseModel):
+    company_id: Optional[UUID] = None
+    source_type: str
+    source_url: Optional[str] = None
+    source_date: Optional[date] = None
+    title: Optional[str] = None
+    content: str
 
 
 @router.get("/", response_model=List[EvidenceResponse])
@@ -74,6 +84,30 @@ async def get_evidence(evidence_id: UUID):
         "validation_status": result[6],
         "created_at": result[7].isoformat() if result[7] else None
     }
+
+
+@router.post("/", response_model=EvidenceResponse)
+async def create_evidence(evidence: EvidenceCreate):
+    """Create new evidence"""
+    evidence_data = {
+        "company_id": str(evidence.company_id) if evidence.company_id else None,
+        "source_type": evidence.source_type,
+        "source_url": evidence.source_url,
+        "source_date": evidence.source_date,
+        "title": evidence.title,
+        "content": evidence.content,
+        "ingested_by": "api"
+    }
+    
+    evidence_id = store.insert_evidence(evidence_data)
+    
+    return EvidenceResponse(
+        id=evidence_id,
+        source_type=evidence.source_type,
+        title=evidence.title or "",
+        source_date=evidence.source_date.isoformat() if evidence.source_date else "",
+        validation_status="pending"
+    )
 
 
 @router.get("/{evidence_id}/claims")
