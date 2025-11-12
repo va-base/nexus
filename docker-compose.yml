@@ -39,10 +39,19 @@ services:
     ports:
       - "4200:4200"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:4200/api/health"]
+      test:
+        - CMD-SHELL
+        - |
+          python -c "import sys, urllib.request, urllib.error, socket
+          try:
+              r = urllib.request.urlopen('http://localhost:4200/api/health', timeout=3)
+              sys.exit(0 if r.getcode() == 200 else 1)
+          except Exception:
+              sys.exit(1)"
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 10
+      start_period: 45s
 
   worker:
     build: .
