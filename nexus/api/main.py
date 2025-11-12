@@ -1,7 +1,7 @@
 """FastAPI application"""
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from nexus.api.routes import hypotheses, evidence, beliefs, investigations
+from nexus.api.routes import hypotheses, evidence, beliefs, investigations, financial_data
 
 app = FastAPI(
     title="Nexus API",
@@ -21,6 +21,7 @@ app.include_router(hypotheses.router, prefix="/api/hypotheses", tags=["hypothese
 app.include_router(evidence.router, prefix="/api/evidence", tags=["evidence"])
 app.include_router(beliefs.router, prefix="/api/beliefs", tags=["beliefs"])
 app.include_router(investigations.router, prefix="/api/investigations", tags=["investigations"])
+app.include_router(financial_data.router, prefix="/api/financial", tags=["financial-data"])
 
 @app.get("/")
 async def root():
