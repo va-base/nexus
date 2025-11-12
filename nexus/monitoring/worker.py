@@ -1,5 +1,6 @@
 """Worker process for monitoring flows"""
 import time
+import threading
 from nexus.storage.redis_bus import RedisEventBus
 from nexus.extraction.claim_extractor import ClaimExtractor
 from nexus.belief.engine import BeliefEngine
@@ -78,5 +79,19 @@ def process_evidence_events():
 if __name__ == "__main__":
     print("Starting Nexus worker...")
     
-    while True:
-        time.sleep(60)
+    ingestion_thread = threading.Thread(target=process_ingestion_events, daemon=True)
+    evidence_thread = threading.Thread(target=process_evidence_events, daemon=True)
+    
+    ingestion_thread.start()
+    evidence_thread.start()
+    
+    print("Worker threads started:")
+    print("  - Ingestion event processor (ingestion.raw -> evidence.extracted)")
+    print("  - Evidence event processor (evidence.extracted -> belief updates)")
+    
+    try:
+        ingestion_thread.join()
+        evidence_thread.join()
+    except KeyboardInterrupt:
+        print("\nShutting down worker...")
+        exit(0)
