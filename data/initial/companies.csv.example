@@ -1,0 +1,4 @@
+ticker,name,sector,market_cap,is_public,notes
+ACME,Acme Corp,Technology,50000000000,true,Leading AI infrastructure company
+BETA,Beta Industries,Consumer,25000000000,true,E-commerce platform with strong growth
+,Gamma Ventures,Technology,,false,Private company Series C stage

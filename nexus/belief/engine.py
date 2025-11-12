@@ -115,7 +115,21 @@ class BeliefEngine:
         
         update_id = self.store.insert_belief_update(update_data)
         
-        self.store.execute("REFRESH MATERIALIZED VIEW current_beliefs")
+        self.store.execute("""
+            INSERT INTO current_beliefs (hypothesis_id, current_belief, log_odds_delta, uncertainty, last_updated)
+            VALUES (:hypothesis_id, :current_belief, :log_odds_delta, :uncertainty, NOW())
+            ON CONFLICT (hypothesis_id) 
+            DO UPDATE SET 
+                current_belief = EXCLUDED.current_belief,
+                log_odds_delta = EXCLUDED.log_odds_delta,
+                uncertainty = EXCLUDED.uncertainty,
+                last_updated = EXCLUDED.last_updated
+        """, {
+            "hypothesis_id": str(hypothesis_id),
+            "current_belief": posterior_belief,
+            "log_odds_delta": delta_logit,
+            "uncertainty": uncertainty
+        })
         
         return {
             "update_id": update_id,

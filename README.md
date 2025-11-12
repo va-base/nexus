@@ -8,6 +8,10 @@ Nexus is a unified research, monitoring, and belief-management system built for 
 # Setup database and seed fixtures
 make setup
 
+# Bootstrap your initial data (optional)
+# See docs/INITIAL_DATA_SETUP.md for details
+make bootstrap
+
 # Start all services
 make run
 
@@ -27,6 +31,30 @@ make eval
 
 # Clean up
 make clean
+```
+
+## Initial Data Setup
+
+Nexus provides a flexible system for bootstrapping your initial knowledge and investment data. You can add:
+
+- **Companies** you want to track (public or private)
+- **Investment themes** and focus areas
+- **Hypotheses** to monitor and evaluate
+- **Raw thoughts, emails, and notes** as unstructured evidence
+- **Research memos** with structured analysis
+- **Priorities** and current focus areas
+
+See [docs/INITIAL_DATA_SETUP.md](docs/INITIAL_DATA_SETUP.md) for a complete guide with examples and templates.
+
+**Quick start:**
+```bash
+# 1. Add your data to data/initial/
+cd data/initial/
+cp companies.json.example companies.json
+# Edit companies.json with your companies
+
+# 2. Run bootstrap
+make bootstrap
 ```
 
 ## Architecture

@@ -1,0 +1,17 @@
+[
+  {
+    "name": "AI Infrastructure",
+    "description": "Companies building foundational AI infrastructure, including compute, data pipelines, and ML platforms",
+    "tags": ["ai", "infrastructure", "enterprise"]
+  },
+  {
+    "name": "Consumer Resilience",
+    "description": "Consumer companies showing resilience in challenging macro environments",
+    "tags": ["consumer", "retail", "e-commerce"]
+  },
+  {
+    "name": "Enterprise SaaS Efficiency",
+    "description": "SaaS companies demonstrating strong unit economics and path to profitability",
+    "tags": ["saas", "enterprise", "efficiency"]
+  }
+]

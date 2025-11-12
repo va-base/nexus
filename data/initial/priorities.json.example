@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Q4 Earnings Season",
+    "description": "Focus on Q4 earnings for AI infrastructure companies to validate growth thesis",
+    "level": "high",
+    "timeframe": "near_term"
+  },
+  {
+    "name": "Consumer Spending Trends",
+    "description": "Monitor consumer spending patterns and resilience indicators across portfolio companies",
+    "level": "high",
+    "timeframe": "ongoing"
+  },
+  {
+    "name": "Enterprise Budget Cycles",
+    "description": "Track enterprise software budget allocation for 2026 planning",
+    "level": "medium",
+    "timeframe": "medium_term"
+  }
+]
