@@ -49,6 +49,8 @@ CREATE TABLE hypotheses (
     initial_belief FLOAT DEFAULT 0.5,
     status VARCHAR(20) DEFAULT 'active',
     embedding vector(384),
+    embedding_model VARCHAR(100) DEFAULT 'sentence-transformers/all-MiniLM-L6-v2',
+    embedding_created_at TIMESTAMPTZ DEFAULT NOW(),
     metadata JSONB,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     created_by VARCHAR(100)
@@ -57,7 +59,7 @@ CREATE TABLE hypotheses (
 CREATE INDEX idx_hypotheses_company ON hypotheses(company_id);
 CREATE INDEX idx_hypotheses_theme ON hypotheses(theme_id);
 CREATE INDEX idx_hypotheses_status ON hypotheses(status);
-CREATE INDEX idx_hypotheses_embedding ON hypotheses USING ivfflat (embedding vector_cosine_ops);
+CREATE INDEX idx_hypotheses_embedding ON hypotheses USING ivfflat (embedding vector_cosine_ops) WITH (lists = 100);
 
 CREATE TABLE evidence (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -91,14 +93,19 @@ CREATE TABLE claims (
     confidence FLOAT,
     extracted_entities JSONB,
     embedding vector(384),
+    context_before TEXT,
+    context_after TEXT,
+    section_name VARCHAR(100),
     model_version VARCHAR(50),
+    embedding_model VARCHAR(100),
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 CREATE INDEX idx_claims_evidence ON claims(evidence_id);
 CREATE INDEX idx_claims_company ON claims(company_id);
 CREATE INDEX idx_claims_type ON claims(claim_type);
-CREATE INDEX idx_claims_embedding ON claims USING ivfflat (embedding vector_cosine_ops);
+CREATE INDEX idx_claims_embedding ON claims USING ivfflat (embedding vector_cosine_ops) WITH (lists = 100);
+CREATE INDEX idx_claims_text_fts ON claims USING gin(to_tsvector('english', claim_text));
 
 CREATE TABLE hypothesis_claims (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -114,7 +121,7 @@ CREATE INDEX idx_hypothesis_claims_hypothesis ON hypothesis_claims(hypothesis_id
 CREATE INDEX idx_hypothesis_claims_claim ON hypothesis_claims(claim_id);
 
 CREATE TABLE belief_updates (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID DEFAULT uuid_generate_v4(),
     hypothesis_id UUID REFERENCES hypotheses(id),
     prior_belief FLOAT NOT NULL,
     posterior_belief FLOAT NOT NULL,
@@ -125,24 +132,30 @@ CREATE TABLE belief_updates (
     relevance_score FLOAT,
     uncertainty FLOAT,
     trigger_reason VARCHAR(100),
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    created_by VARCHAR(100)
-);
+    created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
+    created_by VARCHAR(100),
+    PRIMARY KEY (id, created_at)
+) PARTITION BY RANGE (created_at);
+
+CREATE TABLE belief_updates_2025_q4 PARTITION OF belief_updates
+    FOR VALUES FROM ('2025-10-01') TO ('2026-01-01');
+CREATE TABLE belief_updates_2026_q1 PARTITION OF belief_updates
+    FOR VALUES FROM ('2026-01-01') TO ('2026-04-01');
+CREATE TABLE belief_updates_2026_q2 PARTITION OF belief_updates
+    FOR VALUES FROM ('2026-04-01') TO ('2026-07-01');
 
 CREATE INDEX idx_belief_updates_hypothesis ON belief_updates(hypothesis_id);
 CREATE INDEX idx_belief_updates_created_at ON belief_updates(created_at);
 
-CREATE MATERIALIZED VIEW current_beliefs AS
-SELECT DISTINCT ON (hypothesis_id)
-    hypothesis_id,
-    posterior_belief as current_belief,
-    log_odds_delta,
-    uncertainty,
-    created_at as last_updated
-FROM belief_updates
-ORDER BY hypothesis_id, created_at DESC;
+CREATE TABLE current_beliefs (
+    hypothesis_id UUID PRIMARY KEY REFERENCES hypotheses(id),
+    current_belief FLOAT NOT NULL,
+    log_odds_delta FLOAT NOT NULL,
+    uncertainty FLOAT,
+    last_updated TIMESTAMPTZ NOT NULL
+);
 
-CREATE UNIQUE INDEX idx_current_beliefs_hypothesis ON current_beliefs(hypothesis_id);
+CREATE INDEX idx_current_beliefs_last_updated ON current_beliefs(last_updated);
 
 CREATE TABLE memos (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -226,7 +239,7 @@ CREATE INDEX idx_investigations_status ON investigations(status);
 CREATE INDEX idx_investigations_priority ON investigations(priority);
 
 CREATE TABLE provenance_log (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID DEFAULT uuid_generate_v4(),
     event_type VARCHAR(50) NOT NULL,
     entity_type VARCHAR(50) NOT NULL,
     entity_id UUID NOT NULL,
@@ -234,17 +247,25 @@ CREATE TABLE provenance_log (
     actor VARCHAR(100),
     payload JSONB,
     content_hash VARCHAR(64),
-    parent_event_id UUID REFERENCES provenance_log(id),
-    created_at TIMESTAMPTZ DEFAULT NOW()
-);
+    parent_event_id UUID,
+    created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
+    PRIMARY KEY (id, created_at)
+) PARTITION BY RANGE (created_at);
+
+CREATE TABLE provenance_log_2025_q4 PARTITION OF provenance_log
+    FOR VALUES FROM ('2025-10-01') TO ('2026-01-01');
+CREATE TABLE provenance_log_2026_q1 PARTITION OF provenance_log
+    FOR VALUES FROM ('2026-01-01') TO ('2026-04-01');
+CREATE TABLE provenance_log_2026_q2 PARTITION OF provenance_log
+    FOR VALUES FROM ('2026-04-01') TO ('2026-07-01');
 
 CREATE INDEX idx_provenance_entity ON provenance_log(entity_type, entity_id);
 CREATE INDEX idx_provenance_event_type ON provenance_log(event_type);
 CREATE INDEX idx_provenance_created_at ON provenance_log(created_at);
 
 CREATE TABLE llm_interactions (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    request_id VARCHAR(100) UNIQUE NOT NULL,
+    id UUID DEFAULT uuid_generate_v4(),
+    request_id VARCHAR(100) NOT NULL,
     model_name VARCHAR(100) NOT NULL,
     prompt_template VARCHAR(100),
     prompt_text TEXT NOT NULL,
@@ -255,8 +276,17 @@ CREATE TABLE llm_interactions (
     latency_ms INTEGER,
     error TEXT,
     redacted_fields JSONB,
-    created_at TIMESTAMPTZ DEFAULT NOW()
-);
+    created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL,
+    PRIMARY KEY (id, created_at),
+    UNIQUE (request_id, created_at)
+) PARTITION BY RANGE (created_at);
+
+CREATE TABLE llm_interactions_2025_q4 PARTITION OF llm_interactions
+    FOR VALUES FROM ('2025-10-01') TO ('2026-01-01');
+CREATE TABLE llm_interactions_2026_q1 PARTITION OF llm_interactions
+    FOR VALUES FROM ('2026-01-01') TO ('2026-04-01');
+CREATE TABLE llm_interactions_2026_q2 PARTITION OF llm_interactions
+    FOR VALUES FROM ('2026-04-01') TO ('2026-07-01');
 
 CREATE INDEX idx_llm_interactions_request_id ON llm_interactions(request_id);
 CREATE INDEX idx_llm_interactions_model ON llm_interactions(model_name);
